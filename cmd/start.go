@@ -71,7 +71,6 @@ func init() {
 			// TODO: Handle cleanup
 			for _, workerConfig := range config.Workers {
 
-				fmt.Println("Starting worker")
 				workerStub := stub.WorkerStub{
 					Name:       workerConfig.Name,
 					TaskQueue:  workerConfig.TaskQueue,

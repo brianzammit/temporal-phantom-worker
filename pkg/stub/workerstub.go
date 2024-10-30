@@ -28,49 +28,54 @@ type WorkerStub struct {
 	worker     worker.Worker
 }
 
-func (stub WorkerStub) Run(wg *sync.WaitGroup) {
+func (workerStub WorkerStub) Run(wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	fmt.Printf("Starting worker %s\n", stub.Name)
+	fmt.Printf("Starting worker '%s'. Task queue: '%s'\n", workerStub.Name, workerStub.TaskQueue)
 
 	c, err := client.Dial(client.Options{})
 	if err != nil {
 		log.Fatalln("Unable to create Temporal client.", err)
 	}
 
-	stub.worker = worker.New(c, stub.TaskQueue, worker.Options{
+	workerStub.worker = worker.New(c, workerStub.TaskQueue, worker.Options{
 		// do not register workflows and activities by their function name
 		DisableRegistrationAliasing: true,
 	})
 
-	// register all the workflows
-	for _, wf := range stub.Workflows {
-		stubbedWf := StubbedWorkflow{
+	// register all the workflow stubs
+	for _, wf := range workerStub.Workflows {
+		workflowStub := WorkflowStub{
 			Result: wf.Result,
 		}
-		stub.worker.RegisterWorkflowWithOptions(stubbedWf.Execute, workflow.RegisterOptions{
+		workerStub.worker.RegisterWorkflowWithOptions(workflowStub.Execute, workflow.RegisterOptions{
 			Name: wf.Type,
 		})
+
+		fmt.Printf("Registered workflow '%s'\n", wf.Type)
 	}
 
-	for _, a := range stub.Activities {
-		stubbedA := StubbedActivity{
+	// register all the activity stubs
+	for _, a := range workerStub.Activities {
+		activityStub := ActivityStub{
 			Result: a.Result,
 		}
 
-		stub.worker.RegisterActivityWithOptions(stubbedA.Execute, activity.RegisterOptions{
+		workerStub.worker.RegisterActivityWithOptions(activityStub.Execute, activity.RegisterOptions{
 			Name: a.Type,
 		})
+
+		fmt.Printf("Registered activity '%s'\n", a.Type)
 	}
 
-	err = stub.worker.Run(worker.InterruptCh())
+	err = workerStub.worker.Run(worker.InterruptCh())
 	if err != nil {
-		fmt.Printf("Error starting worker '%s': %v", stub.Name, err)
+		fmt.Printf("Error starting worker '%s': %v", workerStub.Name, err)
 		return
 	}
 }
 
-func (stub WorkerStub) Stop() {
-	fmt.Printf("Stopping worker %s\n", stub.Name)
-	stub.worker.Stop()
+func (workerStub WorkerStub) Stop() {
+	fmt.Printf("Stopping worker %s\n", workerStub.Name)
+	workerStub.worker.Stop()
 }

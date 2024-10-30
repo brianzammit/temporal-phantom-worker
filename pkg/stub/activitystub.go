@@ -6,11 +6,11 @@ import (
 	"go.temporal.io/sdk/activity"
 )
 
-type StubbedActivity struct {
+type ActivityStub struct {
 	Result interface{}
 }
 
-func (a StubbedActivity) Execute(ctx context.Context, input interface{}) (interface{}, error) {
+func (a ActivityStub) Execute(ctx context.Context, input interface{}) (interface{}, error) {
 	info := activity.GetInfo(ctx)
 
 	fmt.Printf("Processing activity '%s' on task queue '%s\n", info.ActivityType.Name, info.TaskQueue)
