@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 	"os"
 	"sync"
 	"temporal-phantom-worker/cmd/internal/configuration"
+	"temporal-phantom-worker/cmd/internal/console"
 	"temporal-phantom-worker/pkg/stub"
 )
 
@@ -20,7 +20,7 @@ var startCmd = &cobra.Command{
 
 		config, err := configuration.ValidateAndLoad(configFile)
 		if err != nil {
-			fmt.Println("Error loading config:", err)
+			console.Error("Error loading config")
 			os.Exit(1)
 		}
 

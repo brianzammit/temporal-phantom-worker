@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"log"
 	"temporal-phantom-worker/cmd/internal/configuration"
+	"temporal-phantom-worker/cmd/internal/console"
 )
 
 var validateCmd = &cobra.Command{
@@ -19,9 +19,9 @@ var validateCmd = &cobra.Command{
 		fmt.Printf("Validating configuration file: %s\n", configFile)
 
 		if err := configuration.ValidateYAMLFile(configFile); err != nil {
-			log.Fatalf("Validation failed: %v\n", err)
+			console.Error("Validation failed: %v\n", err)
 		} else {
-			fmt.Println("Configuration file is valid.")
+			console.Success("Configuration file is valid.")
 		}
 	},
 }

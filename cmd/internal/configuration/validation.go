@@ -4,10 +4,9 @@ import (
 	"embed"
 	"errors"
 	"fmt"
-	"os"
-
 	"github.com/xeipuuv/gojsonschema"
 	"gopkg.in/yaml.v3"
+	"os"
 )
 
 //go:embed assets/config-schema.json
@@ -42,7 +41,7 @@ func ValidateYAMLFile(filename string) error {
 		for _, desc := range result.Errors() {
 			fmt.Printf("Validation error: %s\n", desc)
 		}
-		return errors.New("configuration failed")
+		return errors.New("configuration invalid")
 	}
 
 	return nil
