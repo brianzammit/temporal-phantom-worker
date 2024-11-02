@@ -5,53 +5,91 @@
     "workers": {
       "type": "array",
       "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "task_queue": {
-            "type": "string"
-          },
-          "workflows": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string"
-                },
-                "result": {}
-              },
-              "required": [
-                "type"
-              ]
-            }
-          },
-          "activities": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string"
-                },
-                "result": {}
-              },
-              "required": [
-                "type"
-              ]
-            }
-          }
-        },
-        "required": [
-          "name",
-          "task_queue"
-        ]
+        "$ref": "#/definitions/TemporalWorker"
       }
     }
   },
   "required": [
     "workers"
-  ]
+  ],
+  "definitions": {
+    "TemporalWorker": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "task_queue": {
+          "type": "string"
+        },
+        "workflows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemporalTaskStub"
+          }
+        },
+        "activities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemporalTaskStub"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "task_queue"
+      ]
+    },
+    "TemporalTaskStub": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "result": {
+        },
+        "error": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "details": {
+            }
+          },
+          "required": [
+            "type"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "result"
+          ],
+          "not": {
+            "required": [
+              "error"
+            ]
+          }
+        },
+        {
+          "required": [
+            "error"
+          ],
+          "not": {
+            "required": [
+              "result"
+            ]
+          }
+        }
+      ]
+    }
+  }
 }

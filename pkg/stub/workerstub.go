@@ -10,21 +10,11 @@ import (
 	"sync"
 )
 
-type Workflow struct {
-	Type   string
-	Result interface{}
-}
-
-type Activity struct {
-	Type   string
-	Result interface{}
-}
-
 type WorkerStub struct {
 	Name       string
 	TaskQueue  string
-	Workflows  []Workflow
-	Activities []Activity
+	Workflows  []Task
+	Activities []Task
 	worker     worker.Worker
 }
 
@@ -46,7 +36,7 @@ func (workerStub WorkerStub) Run(wg *sync.WaitGroup) {
 	// register all the workflow stubs
 	for _, wf := range workerStub.Workflows {
 		workflowStub := WorkflowStub{
-			Result: wf.Result,
+			task: wf,
 		}
 		workerStub.worker.RegisterWorkflowWithOptions(workflowStub.Execute, workflow.RegisterOptions{
 			Name: wf.Type,
@@ -57,8 +47,8 @@ func (workerStub WorkerStub) Run(wg *sync.WaitGroup) {
 
 	// register all the activity stubs
 	for _, a := range workerStub.Activities {
-		activityStub := ActivityStub{
-			Result: a.Result,
+		activityStub := activityStub{
+			task: a,
 		}
 
 		workerStub.worker.RegisterActivityWithOptions(activityStub.Execute, activity.RegisterOptions{
@@ -70,7 +60,7 @@ func (workerStub WorkerStub) Run(wg *sync.WaitGroup) {
 
 	err = workerStub.worker.Run(worker.InterruptCh())
 	if err != nil {
-		fmt.Printf("Error starting worker '%s': %v", workerStub.Name, err)
+		fmt.Printf("error starting worker '%s': %v", workerStub.Name, err)
 		return
 	}
 }

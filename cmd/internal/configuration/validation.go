@@ -30,7 +30,7 @@ func ValidateYAMLFile(filename string) error {
 	schemaLoader := gojsonschema.NewBytesLoader(schemaJSON)
 	documentLoader := gojsonschema.NewGoLoader(yamlData)
 
-	// Perform configuration
+	// Perform validation
 	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
 	if err != nil {
 		return fmt.Errorf("schema configuration error: %w", err)

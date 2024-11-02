@@ -1,4 +1,5 @@
 workers:
+    # a Simple Worker registering 1 Workflow and 1 Activity returning strings
   - name: SimpleWorker
     task_queue: simple
     workflows:
@@ -7,6 +8,7 @@ workers:
     activities:
       - type: HelloWorldActivity
         result: "Hello World"
+  # A Complex Worker registering 2 Workflow and 2 Activities returning object results
   - name: ComplexWorker
     task_queue: complex
     workflows:
@@ -47,3 +49,21 @@ workers:
           messages:
             english: "Goodbye World"
             maltese: "Ċaw Dinja!"
+  # An Error Worker simulating Workflow and Activity Errors
+  - name: ErrorWorker
+    task_queue: error
+    workflows:
+      - type: ErrorWorkflow
+        error:
+          type: "java.lang.RuntimeException"
+          message: "Oops! Something went wrong"
+          details: "These are simple string details"
+    activities:
+      - type: ErrorActivity
+        error:
+          type: "java.lang.RuntimeException"
+          message: "Oops! Something went wrong"
+          details:
+            cause:
+              name: "java.io.FileException"
+              message: "File not Found"

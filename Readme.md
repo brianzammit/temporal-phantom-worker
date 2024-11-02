@@ -17,14 +17,14 @@ Temporal Phantom Worker is a Go-based project designed to facilitate testing Tem
 To run the project, use the following command:
 
 ```bash
-go run main.go start -c ./config/sample1.yaml
+go run main.go start -c ./config/sample.yaml
 ```
 
 ## Configuration
 The configuration file should be in YAML format and define the workers, workflows, and activities. Each worker can have multiple workflows and activities, along with their expected results.
 
 ### Example Config File
-Here is an example configuration file ([sample1.yaml](config/sample1.yaml)):
+Here is an example configuration file ([sample.yaml](config/sample.yaml)):
 
 ```yaml
 workers:

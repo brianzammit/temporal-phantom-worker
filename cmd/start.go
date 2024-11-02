@@ -20,7 +20,7 @@ var startCmd = &cobra.Command{
 
 		config, err := configuration.ValidateAndLoad(configFile)
 		if err != nil {
-			console.Error("Error loading config")
+			console.Error("error loading config")
 			os.Exit(1)
 		}
 
@@ -32,8 +32,8 @@ var startCmd = &cobra.Command{
 			workerStub := stub.WorkerStub{
 				Name:       workerConfig.Name,
 				TaskQueue:  workerConfig.TaskQueue,
-				Workflows:  workflowStubsFromConfig(workerConfig.Workflows),
-				Activities: activityStubsFromConfig(workerConfig.Activities),
+				Workflows:  taskFromWorkflowConfig(workerConfig.Workflows),
+				Activities: taskFromActivityConfig(workerConfig.Activities),
 			}
 
 			wg.Add(1)
@@ -51,23 +51,33 @@ func init() {
 	rootCmd.AddCommand(startCmd)
 }
 
-func activityStubsFromConfig(activitiesConfig []configuration.Activity) []stub.Activity {
-	stubs := make([]stub.Activity, len(activitiesConfig))
-	for i, c := range activitiesConfig {
-		stubs[i] = stub.Activity{
-			Type:   c.Type,
-			Result: c.Result,
+func taskFromActivityConfig(activitiesConfig []configuration.Activity) []stub.Task {
+	stubs := make([]stub.Task, len(activitiesConfig))
+	for i, a := range activitiesConfig {
+		if a.IsSuccess() {
+			stubs[i] = stub.NewSuccessTask(a.Type, a.Result)
+		} else {
+			stubs[i] = stub.NewErrorTask(a.Type, stub.Error{
+				Type:    a.Error.Type,
+				Message: a.Error.Message,
+				Details: a.Error.Details,
+			})
 		}
 	}
 	return stubs
 }
 
-func workflowStubsFromConfig(workflowsConfig []configuration.Workflow) []stub.Workflow {
-	stubs := make([]stub.Workflow, len(workflowsConfig))
-	for i, c := range workflowsConfig {
-		stubs[i] = stub.Workflow{
-			Type:   c.Type,
-			Result: c.Result,
+func taskFromWorkflowConfig(workflowsConfig []configuration.Workflow) []stub.Task {
+	stubs := make([]stub.Task, len(workflowsConfig))
+	for i, w := range workflowsConfig {
+		if w.IsSuccess() {
+			stubs[i] = stub.NewSuccessTask(w.Type, w.Result)
+		} else {
+			stubs[i] = stub.NewErrorTask(w.Type, stub.Error{
+				Type:    w.Error.Type,
+				Message: w.Error.Message,
+				Details: w.Error.Details,
+			})
 		}
 	}
 	return stubs

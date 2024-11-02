@@ -19,5 +19,5 @@ func Warn(message string, args ...interface{}) {
 // Error prints an error message in red
 func Error(message string, args ...interface{}) {
 	red := color.New(color.FgRed)
-	red.Printf("❌  Error: "+message+"\n", args...)
+	red.Printf("❌  error: "+message+"\n", args...)
 }
