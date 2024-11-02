@@ -18,7 +18,7 @@ func (a activityStub) Execute(ctx context.Context, input interface{}) (interface
 	fmt.Printf("Input: %s\n", input)
 
 	if a.task.isSuccess() {
-		fmt.Printf("Output: %s\n", a.task.result)
+		fmt.Printf("Output: %+v\n", a.task.result)
 
 		return a.task.result, nil
 	} else {

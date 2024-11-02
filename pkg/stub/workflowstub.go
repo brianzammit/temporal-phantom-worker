@@ -17,7 +17,7 @@ func (wf WorkflowStub) Execute(ctx workflow.Context, input interface{}) (interfa
 	fmt.Printf("Input: %s\n", input)
 
 	if wf.task.isSuccess() {
-		fmt.Printf("Output: %s\n", wf.task.result)
+		fmt.Printf("Output: %+v\n", wf.task.result)
 		return wf.task.result, nil
 	} else {
 		fmt.Printf("Error output: %s\n", wf.task.error)
