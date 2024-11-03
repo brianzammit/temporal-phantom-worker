@@ -39,22 +39,22 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: bin/linux/phantom-worker
-          asset_name: phantom-worker-linux-amd64
+          asset_path: bin/linux/temporal-phantom-worker
+          asset_name: temporal-phantom-worker-linux-amd64
           asset_content_type: application/octet-stream
 
       - name: Upload Windows Binary
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: bin/windows/phantom-worker.exe
-          asset_name: phantom-worker-windows-amd64.exe
+          asset_path: bin/windows/temporal-phantom-worker.exe
+          asset_name: temporal-phantom-worker-windows-amd64.exe
           asset_content_type: application/octet-stream
 
       - name: Upload macOS Binary
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: bin/mac/phantom-worker
-          asset_name: phantom-worker-mac-amd64
+          asset_path: bin/mac/temporal-phantom-worker
+          asset_name: temporal-phantom-worker-mac-amd64
           asset_content_type: application/octet-stream
