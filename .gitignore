@@ -24,3 +24,6 @@ go.work.sum
 # JetBrains IDEs
 .DS_Store
 .idea
+
+# bin
+bin/
