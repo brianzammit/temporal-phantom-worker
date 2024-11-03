@@ -50,4 +50,7 @@ clean:
 # Run both build and tests
 all: test build
 
-.PHONY: all build test clean help build-linux build-windows build-macos
+# Build for release (same as build target but organized for clarity)
+build-release: build
+
+.PHONY: all build test clean help build-linux build-windows build-macos build-release
