@@ -22,11 +22,14 @@ jobs:
         run: make test
 
       - name: Build binaries for release
-        run: make build-release
+        run: make release
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: release/your-binary-name.tar.gz
+          files: |
+            release/temporal-phantom-worker-darwin-amd64-v0.0.0-beta.tar.gz
+            release/temporal-phantom-worker-linux-amd64-v0.0.0-beta.tar.gz
+            release/temporal-phantom-worker-windows-amd64-v0.0.0-beta.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
