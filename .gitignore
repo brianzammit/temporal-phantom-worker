@@ -27,3 +27,6 @@ go.work.sum
 
 # bin
 bin/
+
+# release
+release/
