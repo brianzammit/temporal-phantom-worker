@@ -29,7 +29,7 @@ help: ## Display this help.
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 .PHONY: build
-build: build-linux build-windows build-macos ## Build the project binaries for all supported platforms
+build: build-linux build-windows build-darwin ## Build the project binaries for all supported platforms
 
 # Cross-compilation targets
 .PHONY: build-linux
@@ -44,11 +44,11 @@ build-windows: ## Build the project binary for Windows
 	@ $(MKDIR) $(BIN_DIR)/windows
 	@ GOOS=windows GOARCH=amd64 $(GO) build $(GOFLAGS) -o $(BIN_DIR)/windows/$(BINARY_NAME).exe .
 
-.PHONY: build-macos
-build-macos: ## Build the project binary for MacOS
-	@ echo "Building for MacOS"
-	@ $(MKDIR) $(BIN_DIR)/macos
-	@ GOOS=darwin GOARCH=amd64 $(GO) build $(GOFLAGS) -o $(BIN_DIR)/macos/$(BINARY_NAME) .
+.PHONY: build-darwin
+build-darwin: ## Build the project binary for Darwin
+	@ echo "Building for Darwin"
+	@ $(MKDIR) $(BIN_DIR)/darwin
+	@ GOOS=darwin GOARCH=amd64 $(GO) build $(GOFLAGS) -o $(BIN_DIR)/darwin/$(BINARY_NAME) .
 
 .PHONY: test
 test: ## Run all tess with verbose output
@@ -64,26 +64,26 @@ clean: ## Clean all generated files
 	@ rm -rf $(RELEASE_DIR)
 
 .PHONY: release
-release: release-linux release-windows release-macos ## Create release packages for all platforms
+release: release-linux release-windows release-darwin ## Create release packages for all platforms
 
 # Package binaries into tar.gz files with versioning
 .PHONY: release-linux
 release-linux: build-linux ## Create release package for Linux
 	@ echo "Creating Linux release package"
 	@ mkdir -p $(RELEASE_DIR)
-	@ tar -czvf $(RELEASE_DIR)/$(BINARY_NAME)-linux-amd64-$(VERSION).tar.gz $(BIN_DIR)/linux
+	@ tar -C $(BIN_DIR)/linux -cvf $(RELEASE_DIR)/$(BINARY_NAME)-linux-amd64-$(VERSION).tar.gz $(BINARY_NAME)
 
 .PHONY: release-windows
 release-windows: build-windows ## Create release package for Windows
 	@ echo "Creating Windows release package"
 	@ mkdir -p $(RELEASE_DIR)
-	@ tar -czvf $(RELEASE_DIR)/$(BINARY_NAME)-windows-amd64-$(VERSION).tar.gz $(BIN_DIR)/windows
+	@ tar -C $(BIN_DIR)/windows -cvf $(RELEASE_DIR)/$(BINARY_NAME)-windows-amd64-$(VERSION).tar.gz $(BINARY_NAME).exe
 
-.PHONY: release-macos
-release-macos: build-macos ## Create release package for MacOS
-	@ echo "Creating MacOS release package"
+.PHONY: release-darwin
+release-darwin: build-darwin ## Create release package for Darwin
+	@ echo "Creating Darwin release package"
 	@ mkdir -p $(RELEASE_DIR)
-	@ tar -czvf $(RELEASE_DIR)/$(BINARY_NAME)-darwin-amd64-$(VERSION).tar.gz $(BIN_DIR)/macos
+	@ tar -C $(BIN_DIR)/darwin -cvf $(RELEASE_DIR)/$(BINARY_NAME)-darwin-amd64-$(VERSION).tar.gz $(BINARY_NAME)
 
 # Run both build and tests
 .PHONY: all
