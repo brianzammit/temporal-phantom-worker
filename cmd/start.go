@@ -26,14 +26,28 @@ var startCmd = &cobra.Command{
 
 		var wg sync.WaitGroup
 
+		serverConfig := stub.ServerConfiguration{
+			Host:      "localhost",
+			Port:      7233,
+			Namespace: "default",
+		}
+		if config.Server != nil {
+			serverConfig = stub.ServerConfiguration{
+				Host:      config.Server.Host,
+				Port:      config.Server.Port,
+				Namespace: config.Server.Namespace,
+			}
+		}
+
 		// TODO: Handle cleanup
 		for _, workerConfig := range config.Workers {
 
 			workerStub := stub.WorkerStub{
-				Name:       workerConfig.Name,
-				TaskQueue:  workerConfig.TaskQueue,
-				Workflows:  taskFromWorkflowConfig(workerConfig.Workflows),
-				Activities: taskFromActivityConfig(workerConfig.Activities),
+				Name:         workerConfig.Name,
+				TaskQueue:    workerConfig.TaskQueue,
+				Workflows:    taskFromWorkflowConfig(workerConfig.Workflows),
+				Activities:   taskFromActivityConfig(workerConfig.Activities),
+				ServerConfig: serverConfig,
 			}
 
 			wg.Add(1)

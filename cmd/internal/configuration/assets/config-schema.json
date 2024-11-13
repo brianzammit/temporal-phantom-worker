@@ -2,6 +2,24 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
+    "server": {
+      "type": "object",
+      "required": ["host", "port", "namespace"],
+      "properties": {
+        "host":{
+          "type": "string",
+          "default": "localhost"
+        },
+        "port": {
+          "type": "number",
+          "default": 7233
+        },
+        "namespace": {
+          "type": "string",
+          "default": "default"
+        }
+      }
+    },
     "workers": {
       "type": "array",
       "items": {

@@ -10,20 +10,35 @@ import (
 	"sync"
 )
 
+type ServerConfiguration struct {
+	Host      string
+	Port      int
+	Namespace string
+}
+
 type WorkerStub struct {
-	Name       string
-	TaskQueue  string
-	Workflows  []Task
-	Activities []Task
-	worker     worker.Worker
+	Name         string
+	TaskQueue    string
+	Workflows    []Task
+	Activities   []Task
+	ServerConfig ServerConfiguration
+	worker       worker.Worker
+}
+
+func (serverConfig ServerConfiguration) toTemporalOptions() client.Options {
+	return client.Options{
+		HostPort:  fmt.Sprintf("%s:%d", serverConfig.Host, serverConfig.Port),
+		Namespace: serverConfig.Namespace,
+	}
 }
 
 func (workerStub WorkerStub) Run(wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	fmt.Printf("Starting worker '%s'. Task queue: '%s'\n", workerStub.Name, workerStub.TaskQueue)
+	fmt.Printf("Starting worker '%s'. Task queue: '%s'. Server: '%s@%s:%d'\n", workerStub.Name, workerStub.TaskQueue,
+		workerStub.ServerConfig.Namespace, workerStub.ServerConfig.Host, workerStub.ServerConfig.Port)
 
-	c, err := client.Dial(client.Options{})
+	c, err := client.Dial(workerStub.ServerConfig.toTemporalOptions())
 	if err != nil {
 		log.Fatalln("Unable to create Temporal client.", err)
 	}

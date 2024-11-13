@@ -1,3 +1,7 @@
+server:
+  host: 127.0.0.1
+  port: 7233
+  namespace: default
 workers:
     # a Simple Worker registering 1 Workflow and 1 Activity returning strings
   - name: SimpleWorker
