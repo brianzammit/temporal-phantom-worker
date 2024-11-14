@@ -130,8 +130,9 @@ func Test_ValidateUniqueWorkerNames_Invalid(t *testing.T) {
 
 	errors := config.validateUniqueTaskQueueNames()
 	assert.Equal(t, 2, len(errors))
-	assert.Equal(t, errors[0], "Task Queue 'queue_1' used by 3 workers. Different worker types should use different task queues.")
-	assert.Equal(t, errors[1], "Task Queue 'queue_2' used by 2 workers. Different worker types should use different task queues.")
+	assert.ElementsMatch(t, errors, []string{
+		"Task Queue 'queue_1' used by 3 workers. Different worker types should use different task queues.",
+		"Task Queue 'queue_2' used by 2 workers. Different worker types should use different task queues."})
 }
 
 func Test_ValidateUniqueTaskQueueNames_Success(t *testing.T) {
@@ -178,9 +179,9 @@ func Test_ValidateUniqueTaskQueueNames_Invalid(t *testing.T) {
 	}
 
 	errors := config.validateUniqueWorkerNames()
-	assert.Equal(t, 2, len(errors))
-	assert.Equal(t, errors[0], "Worker 'WorkerOne' configured 3 times. Worker names should be unique.")
-	assert.Equal(t, errors[1], "Worker 'WorkerTwo' configured 2 times. Worker names should be unique.")
+	assert.ElementsMatch(t, errors, []string{
+		"Worker 'WorkerOne' configured 3 times. Worker names should be unique.",
+		"Worker 'WorkerTwo' configured 2 times. Worker names should be unique."})
 }
 
 func Test_ValidateNonEmptyWorkers_Success(t *testing.T) {
@@ -233,7 +234,8 @@ func Test_ValidateNonEmptyWorkers_Invalid(t *testing.T) {
 
 	errors := config.validatedNonEmptyWorkers()
 	assert.Equal(t, 3, len(errors))
-	assert.Equal(t, errors[0], "Worker 'WorkerOne' does not handle any Activity or Workflow. Each worker should handle at least 1 Activity or Workflow")
-	assert.Equal(t, errors[1], "Worker 'WorkerTwo' does not handle any Activity or Workflow. Each worker should handle at least 1 Activity or Workflow")
-	assert.Equal(t, errors[2], "Worker 'WorkerThree' does not handle any Activity or Workflow. Each worker should handle at least 1 Activity or Workflow")
+	assert.ElementsMatch(t, errors, []string{
+		"Worker 'WorkerOne' does not handle any Activity or Workflow. Each worker should handle at least 1 Activity or Workflow",
+		"Worker 'WorkerTwo' does not handle any Activity or Workflow. Each worker should handle at least 1 Activity or Workflow",
+		"Worker 'WorkerThree' does not handle any Activity or Workflow. Each worker should handle at least 1 Activity or Workflow"})
 }
