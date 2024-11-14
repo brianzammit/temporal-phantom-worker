@@ -4,9 +4,6 @@ Temporal Phantom Worker is a Go-based project designed to facilitate testing Tem
 not all microservices are available. It allows users to create worker stubs that register workflows and activities,
 returning predefined responses or errors based on the provided configuration.
 
-**Work in Progress:** Currently, the Phantom Worker only connects to localhost on port 7233, using the default
-namespace.
-
 ## Table of Contents
 
 - [Installation](#installation)
