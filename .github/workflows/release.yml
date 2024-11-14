@@ -28,8 +28,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            release/temporal-phantom-worker-darwin-amd64-v0.0.0-beta.tar.gz
-            release/temporal-phantom-worker-linux-amd64-v0.0.0-beta.tar.gz
-            release/temporal-phantom-worker-windows-amd64-v0.0.0-beta.tar.gz
+            release/temporal-phantom-worker-darwin-amd64-*.tar.gz
+            release/temporal-phantom-worker-linux-amd64-*.tar.gz
+            release/temporal-phantom-worker-windows-amd64-*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
