@@ -11,6 +11,8 @@ import (
 	"sync"
 )
 
+var loadX509KeyPair = tls.LoadX509KeyPair
+
 type ServerConfiguration struct {
 	Host      string
 	Port      int
@@ -39,7 +41,7 @@ func (serverConfig ServerConfiguration) toTemporalOptions() client.Options {
 	}
 
 	if serverConfig.Mtls != nil {
-		cert, err := tls.LoadX509KeyPair(serverConfig.Mtls.CertPath, serverConfig.Mtls.KeyPath)
+		cert, err := loadX509KeyPair(serverConfig.Mtls.CertPath, serverConfig.Mtls.KeyPath)
 		if err != nil {
 			log.Fatalln("Failed to load X509 certificate and key. Error:", err)
 		}

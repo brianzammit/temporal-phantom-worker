@@ -74,11 +74,3 @@ workers:
             cause:
               name: "java.io.FileException"
               message: "File not Found"
-  - name: CloudWorker
-    task_queue: test_q
-    workflows:
-      - type: DemoWF
-        result:
-          messageDetails:
-            message: "Hello World"
-            len: 2
