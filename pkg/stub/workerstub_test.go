@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestServerConfiguration_toTemporalOptions_noTls(t *testing.T) {
+func TestServerConfiguration_toTemporalOptions_noMtls(t *testing.T) {
 	// Setup valid server configuration without mtls
 	serverConfig := ServerConfiguration{
 		Host:      "test.hostname.com",
@@ -25,7 +25,7 @@ func TestServerConfiguration_toTemporalOptions_noTls(t *testing.T) {
 	assert.Nil(t, clientOpts.ConnectionOptions.TLS)
 }
 
-func TestServerConfiguration_toTemporalOptions_withTls(t *testing.T) {
+func TestServerConfiguration_toTemporalOptions_withMtls(t *testing.T) {
 	// Mock the Certificate Loading
 	originalLoadX509KeyPair := loadX509KeyPair
 	defer func() {
