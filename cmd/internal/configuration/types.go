@@ -25,10 +25,16 @@ type Worker struct {
 	Activities []Activity `yaml:"activities"`
 }
 
+type Mtls struct {
+	CertPath string `yaml:"cert_path"`
+	KeyPath  string `yaml:"key_path"`
+}
+
 type Server struct {
 	Host      string `yaml:"host"`
 	Port      int    `yaml:"port"`
 	Namespace string `yaml:"namespace"`
+	Mtls      *Mtls  `yaml:"mtls"`
 }
 
 type Config struct {

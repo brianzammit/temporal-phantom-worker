@@ -1,6 +1,7 @@
 package stub
 
 import (
+	"crypto/tls"
 	"fmt"
 	"go.temporal.io/sdk/activity"
 	"go.temporal.io/sdk/client"
@@ -14,6 +15,12 @@ type ServerConfiguration struct {
 	Host      string
 	Port      int
 	Namespace string
+	Mtls      *MtlsConfiguration
+}
+
+type MtlsConfiguration struct {
+	CertPath string
+	KeyPath  string
 }
 
 type WorkerStub struct {
@@ -26,10 +33,25 @@ type WorkerStub struct {
 }
 
 func (serverConfig ServerConfiguration) toTemporalOptions() client.Options {
-	return client.Options{
+	clientOpts := client.Options{
 		HostPort:  fmt.Sprintf("%s:%d", serverConfig.Host, serverConfig.Port),
 		Namespace: serverConfig.Namespace,
 	}
+
+	if serverConfig.Mtls != nil {
+		cert, err := tls.LoadX509KeyPair(serverConfig.Mtls.CertPath, serverConfig.Mtls.KeyPath)
+		if err != nil {
+			log.Fatalln("Failed to load X509 certificate and key. Error: %v", err)
+		}
+
+		clientOpts.ConnectionOptions = client.ConnectionOptions{
+			TLS: &tls.Config{
+				Certificates: []tls.Certificate{cert},
+			},
+		}
+	}
+
+	return clientOpts
 }
 
 func (workerStub WorkerStub) Run(wg *sync.WaitGroup) {

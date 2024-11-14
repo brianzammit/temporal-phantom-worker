@@ -4,7 +4,6 @@
   "properties": {
     "server": {
       "type": "object",
-      "required": ["host", "port", "namespace"],
       "properties": {
         "host":{
           "type": "string",
@@ -17,6 +16,18 @@
         "namespace": {
           "type": "string",
           "default": "default"
+        },
+        "mtls": {
+          "type": "object",
+          "required": ["cert_path", "key_path"],
+          "properties": {
+            "cert_path": {
+              "type": "string"
+            },
+            "key_path": {
+              "type": "string"
+            }
+          }
         }
       }
     },

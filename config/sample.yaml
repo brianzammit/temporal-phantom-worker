@@ -1,7 +1,10 @@
 server:
-  host: 127.0.0.1
+  host: localhost
   port: 7233
   namespace: default
+  mtls: # Remove if mTLS is not required
+    cert_path: "cert.crt"
+    key_path: "cert.key"
 workers:
     # a Simple Worker registering 1 Workflow and 1 Activity returning strings
   - name: SimpleWorker
@@ -71,3 +74,11 @@ workers:
             cause:
               name: "java.io.FileException"
               message: "File not Found"
+  - name: CloudWorker
+    task_queue: test_q
+    workflows:
+      - type: DemoWF
+        result:
+          messageDetails:
+            message: "Hello World"
+            len: 2
