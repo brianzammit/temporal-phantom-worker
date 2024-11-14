@@ -41,7 +41,7 @@ func (serverConfig ServerConfiguration) toTemporalOptions() client.Options {
 	if serverConfig.Mtls != nil {
 		cert, err := tls.LoadX509KeyPair(serverConfig.Mtls.CertPath, serverConfig.Mtls.KeyPath)
 		if err != nil {
-			log.Fatalln("Failed to load X509 certificate and key. Error: %v", err)
+			log.Fatalln("Failed to load X509 certificate and key. Error:", err)
 		}
 
 		clientOpts.ConnectionOptions = client.ConnectionOptions{
