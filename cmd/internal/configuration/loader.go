@@ -6,7 +6,7 @@ import (
 )
 
 func ValidateAndLoad(filename string) (*Config, error) {
-	err := ValidateYAMLFile(filename)
+	err := validateSchema(filename)
 	if err != nil {
 		return nil, err
 	}
@@ -21,5 +21,10 @@ func ValidateAndLoad(filename string) (*Config, error) {
 	if err := decoder.Decode(&config); err != nil {
 		return nil, err
 	}
+
+	if err := config.validate(); err != nil {
+		return nil, err
+	}
+
 	return &config, nil
 }

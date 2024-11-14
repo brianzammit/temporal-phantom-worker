@@ -18,7 +18,7 @@ var validateCmd = &cobra.Command{
 		configFile, _ := cmd.Flags().GetString("config")
 		fmt.Printf("Validating configuration file: %s\n", configFile)
 
-		if err := configuration.ValidateYAMLFile(configFile); err != nil {
+		if _, err := configuration.ValidateAndLoad(configFile); err != nil {
 			console.Error("Validation failed: %v\n", err)
 		} else {
 			console.Success("Configuration file is valid.")
