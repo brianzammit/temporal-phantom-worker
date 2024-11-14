@@ -1,6 +1,7 @@
 package stub
 
 import (
+	"crypto/tls"
 	"fmt"
 	"go.temporal.io/sdk/activity"
 	"go.temporal.io/sdk/client"
@@ -10,20 +11,58 @@ import (
 	"sync"
 )
 
+var loadX509KeyPair = tls.LoadX509KeyPair
+
+type ServerConfiguration struct {
+	Host      string
+	Port      int
+	Namespace string
+	Mtls      *MtlsConfiguration
+}
+
+type MtlsConfiguration struct {
+	CertPath string
+	KeyPath  string
+}
+
 type WorkerStub struct {
-	Name       string
-	TaskQueue  string
-	Workflows  []Task
-	Activities []Task
-	worker     worker.Worker
+	Name         string
+	TaskQueue    string
+	Workflows    []Task
+	Activities   []Task
+	ServerConfig ServerConfiguration
+	worker       worker.Worker
+}
+
+func (serverConfig ServerConfiguration) toTemporalOptions() client.Options {
+	clientOpts := client.Options{
+		HostPort:  fmt.Sprintf("%s:%d", serverConfig.Host, serverConfig.Port),
+		Namespace: serverConfig.Namespace,
+	}
+
+	if serverConfig.Mtls != nil {
+		cert, err := loadX509KeyPair(serverConfig.Mtls.CertPath, serverConfig.Mtls.KeyPath)
+		if err != nil {
+			log.Fatalln("Failed to load X509 certificate and key. Error:", err)
+		}
+
+		clientOpts.ConnectionOptions = client.ConnectionOptions{
+			TLS: &tls.Config{
+				Certificates: []tls.Certificate{cert},
+			},
+		}
+	}
+
+	return clientOpts
 }
 
 func (workerStub WorkerStub) Run(wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	fmt.Printf("Starting worker '%s'. Task queue: '%s'\n", workerStub.Name, workerStub.TaskQueue)
+	fmt.Printf("Starting worker '%s'. Task queue: '%s'. Server: '%s@%s:%d'\n", workerStub.Name, workerStub.TaskQueue,
+		workerStub.ServerConfig.Namespace, workerStub.ServerConfig.Host, workerStub.ServerConfig.Port)
 
-	c, err := client.Dial(client.Options{})
+	c, err := client.Dial(workerStub.ServerConfig.toTemporalOptions())
 	if err != nil {
 		log.Fatalln("Unable to create Temporal client.", err)
 	}

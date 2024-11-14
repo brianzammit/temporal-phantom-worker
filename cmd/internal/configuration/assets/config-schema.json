@@ -2,6 +2,35 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
+    "server": {
+      "type": "object",
+      "properties": {
+        "host":{
+          "type": "string",
+          "default": "localhost"
+        },
+        "port": {
+          "type": "number",
+          "default": 7233
+        },
+        "namespace": {
+          "type": "string",
+          "default": "default"
+        },
+        "mtls": {
+          "type": "object",
+          "required": ["cert_path", "key_path"],
+          "properties": {
+            "cert_path": {
+              "type": "string"
+            },
+            "key_path": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "workers": {
       "type": "array",
       "items": {

@@ -1,3 +1,10 @@
+server:
+  host: localhost
+  port: 7233
+  namespace: default
+  mtls: # Remove if mTLS is not required
+    cert_path: "cert.crt"
+    key_path: "cert.key"
 workers:
     # a Simple Worker registering 1 Workflow and 1 Activity returning strings
   - name: SimpleWorker

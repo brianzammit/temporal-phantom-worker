@@ -4,9 +4,6 @@ Temporal Phantom Worker is a Go-based project designed to facilitate testing Tem
 not all microservices are available. It allows users to create worker stubs that register workflows and activities,
 returning predefined responses or errors based on the provided configuration.
 
-**Work in Progress:** Currently, the Phantom Worker only connects to localhost on port 7233, using the default
-namespace.
-
 ## Table of Contents
 
 - [Installation](#installation)
@@ -74,6 +71,13 @@ multiple workflows and activities, along with their expected results.
 
 | Field                | Type              | Description                                                                                                                     |
 |----------------------|-------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| `server`             | Server            | The Temporal Server to connect to.                                                                                              |
+| ├─ `host`            | String            | The server hostname. Default: `localhost`.                                                                                      |
+| ├─ `port`            | Number            | The server port. Default: `7233`.                                                                                               |
+| ├─ `namespace`       | String            | The namespace to connect to. Default: `default`.                                                                                |
+| ├─ `mtls`            | Mtls              | The mTLS configuration if mTLS is desired. mTLS will not be used if not present.                                                |
+| │   ├─ `cert_path`   | String            | Path to the client certificate file.                                                                                            |
+| │   ├─ `key_path`    | String            | Path to the client key file.                                                                                                    |
 | `workers`            | Array of Worker   | A list of workers to run, each defined by a name, task queue, workflows, and activities.                                        |
 | ├─ `name`            | String            | The unique name of the worker.                                                                                                  |
 | ├─ `task_queue`      | String            | The task queue to which the worker is polling for tasks on (should be unique per worker).                                       |
