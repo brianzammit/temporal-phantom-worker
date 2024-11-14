@@ -12,8 +12,8 @@ import (
 //go:embed assets/config-schema.json
 var schemaFile embed.FS
 
-// ValidateYAMLFile validates a YAML file against the JSON schema.
-func ValidateYAMLFile(filename string) error {
+// validate validates a YAML file against the JSON schema
+func validateSchema(filename string) error {
 	// Load the JSON schema from embedded assets
 	schemaJSON, err := schemaFile.ReadFile("assets/config-schema.json")
 	if err != nil {
