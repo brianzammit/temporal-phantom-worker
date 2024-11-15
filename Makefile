@@ -4,6 +4,7 @@ BIN_DIR=bin
 RELEASE_DIR=release
 
 # Go settings
+GOENVVARS=CGO_ENABLED=0
 GO=go
 GOFLAGS=
 
@@ -36,19 +37,19 @@ build: build-linux build-windows build-darwin ## Build the project binaries for 
 build-linux: ## Build the project binary for Linux
 	@ echo "Building for Linux"
 	@ $(MKDIR) $(BIN_DIR)/linux
-	@ GOOS=linux GOARCH=amd64 $(GO) build $(GOFLAGS) -o $(BIN_DIR)/linux/$(BINARY_NAME) .
+	@ GOOS=linux GOARCH=amd64 $(GOENVVARS) $(GO) build $(GOFLAGS) -o $(BIN_DIR)/linux/$(BINARY_NAME) .
 
 .PHONY: build-windows
 build-windows: ## Build the project binary for Windows
 	@ echo "Building for Windows"
 	@ $(MKDIR) $(BIN_DIR)/windows
-	@ GOOS=windows GOARCH=amd64 $(GO) build $(GOFLAGS) -o $(BIN_DIR)/windows/$(BINARY_NAME).exe .
+	@ GOOS=windows GOARCH=amd64 $(GOENVVARS) $(GO) build $(GOFLAGS) -o $(BIN_DIR)/windows/$(BINARY_NAME).exe .
 
 .PHONY: build-darwin
 build-darwin: ## Build the project binary for Darwin
 	@ echo "Building for Darwin"
 	@ $(MKDIR) $(BIN_DIR)/darwin
-	@ GOOS=darwin GOARCH=amd64 $(GO) build $(GOFLAGS) -o $(BIN_DIR)/darwin/$(BINARY_NAME) .
+	@ GOOS=darwin GOARCH=amd64 $(GOENVVARS) $(GO) build $(GOFLAGS) -o $(BIN_DIR)/darwin/$(BINARY_NAME) .
 
 .PHONY: test
 test: ## Run all tess with verbose output
