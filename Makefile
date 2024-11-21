@@ -3,16 +3,19 @@ BINARY_NAME=temporal-phantom-worker
 BIN_DIR=bin
 RELEASE_DIR=release
 
+# Version details
+VERSION ?= $(shell git describe --tags --abbrev=0)
+BUILD_TIME := $(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
+COMMIT_HASH := $(shell git rev-parse --short HEAD)
+
 # Go settings
 GOENVVARS=CGO_ENABLED=0
 GO=go
-GOFLAGS=
+LDFLAGS="-ldflags=""-X 'temporal-phantom-worker/cmd.Version=$(VERSION)'"" ""-X 'temporal-phantom-worker/cmd.BuildTime=$(BUILD_TIME)'"" ""-X 'temporal-phantom-worker/cmd.CommitHash=$(COMMIT_HASH)'"""
+GOFLAGS=$(LDFLAGS)
 
 # Create directories in a cross-platform manner
 MKDIR = mkdir -p
-
-# Default release version if not specified
-VERSION ?= $(shell git describe --tags --abbrev=0)
 
 # The help target prints out all targets with their descriptions organized
 # beneath their categories. The categories are represented by '##@' and the
