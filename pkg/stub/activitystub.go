@@ -18,14 +18,41 @@ func (a activityStub) Execute(ctx context.Context, input interface{}) (interface
 	fmt.Printf("Input: %s\n", input)
 
 	if a.task.isSuccess() {
-		fmt.Printf("Output: %+v\n", a.task.result)
+		processedResult, err := a.task.result.process(input)
+		if err != nil {
+			return nil, err
+		}
 
-		return a.task.result, nil
+		fmt.Printf("Output: %+v\n", processedResult)
+
+		return processedResult, nil
 	} else {
-		fmt.Printf("Error output: %s\n", a.task.error)
+		fmt.Printf("Error output: %v\n", a.task.error)
+
+		var message string
+		err := processResult(*a.task.error.Message, input, &message)
+		if err != nil {
+			return nil, err
+		}
+
+		var details interface{}
+		err = processResult(*a.task.error.Details, input, &details)
+		if err != nil {
+			return nil, err
+		}
+
 		return nil, temporal.NewApplicationError(
-			a.task.error.Message,
+			message,
 			a.task.error.Type,
-			a.task.error.Details)
+			details)
 	}
+}
+
+func processResult[T interface{}](resultTemplate ResultTemplate, input interface{}, output *T) error {
+	details, err := resultTemplate.process(input)
+	if err != nil {
+		return err
+	}
+	*output = details.(T)
+	return nil
 }

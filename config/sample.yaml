@@ -2,16 +2,16 @@ server:
   host: localhost
   port: 7233
   namespace: default
-  mtls: # Remove if mTLS is not required
-    cert_path: "cert.crt"
-    key_path: "cert.key"
+#  mtls: # Remove if mTLS is not required
+#    cert_path: "cert.crt"
+#    key_path: "cert.key"
 workers:
     # a Simple Worker registering 1 Workflow and 1 Activity returning strings
   - name: SimpleWorker
     task_queue: simple
     workflows:
       - type: HelloWorldWorkflow
-        result: "Hello World"
+        result: "{{randomString}}"
     activities:
       - type: HelloWorldActivity
         result: "Hello World"
@@ -21,13 +21,15 @@ workers:
     workflows:
       - type: HelloWorldWorkflow
         result:
+          id: "{{ randomString 25 }}"
+          timestamp: "{{ currentTime }}"
           supportedLanguagesCount: 2
           supportedLanguages:
             - english
             - maltese
           messages:
-            english: "Hello World"
-            maltese: "Aw Dinja!"
+            english: "Hello {{if .name }}{{ .name }}{{end}} {{if .surname}}{{.surname }}{{end}}"
+            maltese: "Aw {{if .name }}{{ .name }}{{end}} {{if .surname}}{{.surname }}{{end}}!"
       - type: GoodbyeWorldWorkflow
         result:
           supportedLanguagesCount: 2

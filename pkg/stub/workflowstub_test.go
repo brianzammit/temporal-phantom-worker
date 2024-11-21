@@ -2,9 +2,8 @@ package stub
 
 import (
 	"go.temporal.io/sdk/temporal"
-	"testing"
-
 	"go.temporal.io/sdk/testsuite"
+	"testing"
 )
 
 func TestWorkflowStub_Execute_Success(t *testing.T) {
@@ -13,8 +12,8 @@ func TestWorkflowStub_Execute_Success(t *testing.T) {
 	env := suite.NewTestWorkflowEnvironment()
 
 	// Set up a successful task
-	task := NewSuccessTask("exampleTask", "Success result")
-	workflowStub := WorkflowStub{task: task}
+	task, _ := NewSuccessTask("exampleTask", "Success result")
+	workflowStub := WorkflowStub{task: *task}
 
 	// Define the workflow execution
 	env.ExecuteWorkflow(workflowStub.Execute, nil)
@@ -33,10 +32,12 @@ func TestWorkflowStub_Execute_Error(t *testing.T) {
 	suite := testsuite.WorkflowTestSuite{}
 	env := suite.NewTestWorkflowEnvironment()
 
+	var errorType = "java.io.IOException"
+	var errorMessage = "oops - something went wrong"
+
 	// Set up a failing task
-	taskError := Error{Type: "java.io.IOException", Message: "oops - something went wrong"}
-	task := NewErrorTask("exampleTask", taskError)
-	workflowStub := WorkflowStub{task: task}
+	task, _ := NewErrorTask("exampleTask", errorType, errorMessage, nil)
+	workflowStub := WorkflowStub{task: *task}
 
 	// Define the workflow execution
 	env.ExecuteWorkflow(workflowStub.Execute, nil)
@@ -50,9 +51,9 @@ func TestWorkflowStub_Execute_Error(t *testing.T) {
 		// Check if the error matches the expected error
 		if execError, ok := err.(*temporal.WorkflowExecutionError); ok {
 			appError := execError.Unwrap().(*temporal.ApplicationError)
-			if appError.Message() != taskError.Message || appError.Type() != taskError.Type {
+			if appError.Message() != errorMessage || appError.Type() != errorType {
 				t.Errorf("Expected error message '%s' of type '%s', got '%s' of type '%s'",
-					taskError.Message, taskError.Type, appError.Message(), appError.Type())
+					errorMessage, errorType, appError.Message(), appError.Type())
 			}
 		} else {
 			t.Errorf("Expected an ApplicationError but got %v", err)
