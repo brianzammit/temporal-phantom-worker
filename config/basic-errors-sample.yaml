@@ -1,0 +1,25 @@
+server:
+  host: localhost
+  port: 7233
+  namespace: default
+#  mtls: # Enable if mTLS is required
+#    cert_path: "cert.crt"
+#    key_path: "cert.key"
+workers:
+  - name: ErrorWorker
+    task_queue: error
+    workflows:
+      - type: ErrorWorkflow
+        error:
+          type: "java.lang.RuntimeException"
+          message: "Oops! Something went wrong"
+          details: "These are simple string details"
+    activities:
+      - type: ErrorActivity
+        error:
+          type: "java.lang.RuntimeException"
+          message: "Oops! Something went wrong"
+          details:
+            cause:
+              name: "java.io.FileException"
+              message: "File not Found"

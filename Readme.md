@@ -53,13 +53,13 @@ To run the project, use the following commands:
 ### Validating configuration
 
 ```bash
-./temporal-phantom-worker validate -c ./config/sample.yaml
+./temporal-phantom-worker validate -c ./config/basic-success-sample.yaml
 ```
 
 ### Starting Phantom Worker
 
 ```bash
-./temporal-phantom-worker start -c ./config/sample.yaml
+./temporal-phantom-worker start -c ./config/basic-success-sample.yaml
 ```
 
 ## Configuration
@@ -98,7 +98,7 @@ multiple workflows and activities, along with their expected results.
 
 ### Example Config File
 
-Here is an example configuration file ([sample.yaml](config/sample.yaml)):
+Example configuration files can be found in the  ([config directory](config)):
 
 ```yaml
 workers:

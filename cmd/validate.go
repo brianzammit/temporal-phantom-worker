@@ -12,7 +12,7 @@ var validateCmd = &cobra.Command{
 	Short: "Validate the configuration file",
 	Example: `
 	# Validate a configuration file against the schema
-	./phantom-worker validate -c ./config/sample.yaml
+	./phantom-worker validate -c ./config/basic-success-sample.yaml
 		`,
 	Run: func(cmd *cobra.Command, args []string) {
 		configFile, _ := cmd.Flags().GetString("config")

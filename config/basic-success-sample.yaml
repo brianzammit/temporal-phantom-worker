@@ -2,7 +2,7 @@ server:
   host: localhost
   port: 7233
   namespace: default
-#  mtls: # Remove if mTLS is not required
+#  mtls: # Enable if mTLS is required
 #    cert_path: "cert.crt"
 #    key_path: "cert.key"
 workers:
@@ -11,7 +11,7 @@ workers:
     task_queue: simple
     workflows:
       - type: HelloWorldWorkflow
-        result: "{{randomString}}"
+        result: "Hello World"
     activities:
       - type: HelloWorldActivity
         result: "Hello World"
@@ -21,15 +21,13 @@ workers:
     workflows:
       - type: HelloWorldWorkflow
         result:
-          id: "{{ randomString 25 }}"
-          timestamp: "{{ currentTime }}"
           supportedLanguagesCount: 2
           supportedLanguages:
             - english
             - maltese
           messages:
-            english: "Hello {{if .name }}{{ .name }}{{end}} {{if .surname}}{{.surname }}{{end}}"
-            maltese: "Aw {{if .name }}{{ .name }}{{end}} {{if .surname}}{{.surname }}{{end}}!"
+            english: "Hello World"
+            maltese: "Aw Dinja!"
       - type: GoodbyeWorldWorkflow
         result:
           supportedLanguagesCount: 2
@@ -58,21 +56,3 @@ workers:
           messages:
             english: "Goodbye World"
             maltese: "Ċaw Dinja!"
-  # An Error Worker simulating Workflow and Activity Errors
-  - name: ErrorWorker
-    task_queue: error
-    workflows:
-      - type: ErrorWorkflow
-        error:
-          type: "java.lang.RuntimeException"
-          message: "Oops! Something went wrong"
-          details: "These are simple string details"
-    activities:
-      - type: ErrorActivity
-        error:
-          type: "java.lang.RuntimeException"
-          message: "Oops! Something went wrong"
-          details:
-            cause:
-              name: "java.io.FileException"
-              message: "File not Found"
