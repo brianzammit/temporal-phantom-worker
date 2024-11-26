@@ -4,12 +4,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var triggerCmd = &cobra.Command{
+var activityCmd = &cobra.Command{
 	Use:     "activity",
 	Aliases: []string{"a"},
-	Short:   "Trigger an action. Use help to see a list of subcommands",
+	Short:   "Use help to see a list of subcommands",
 }
 
 func init() {
-	rootCmd.AddCommand(triggerCmd)
+	rootCmd.AddCommand(activityCmd)
 }

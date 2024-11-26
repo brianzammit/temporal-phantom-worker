@@ -16,8 +16,8 @@ import (
 )
 
 var triggerActivityCmd = &cobra.Command{
-	Use:     "activity",
-	Aliases: []string{"a"},
+	Use:     "trigger",
+	Aliases: []string{"t"},
 	Short:   "Trigger an activity by wrapping it in a workflow",
 	Long:    `Trigger an activity by wrapping it in a workflow`,
 	Example: `
@@ -165,5 +165,5 @@ func init() {
 	triggerActivityCmd.Flags().StringP("cert_path", "c", "", "The Temporal mTLS certificate path")
 	triggerActivityCmd.Flags().StringP("key_path", "k", "", "The Temporal mTLS key path")
 
-	triggerCmd.AddCommand(triggerActivityCmd)
+	activityCmd.AddCommand(triggerActivityCmd)
 }
