@@ -14,7 +14,7 @@ var startCmd = &cobra.Command{
 	Short: "Start the worker with a YAML configuration",
 	Example: `
 	# Start the Phantom Worker with a specific config
-	phantom-worker start -c ./config/sample.yaml`,
+	phantom-worker stub start -c ./config/sample.yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
 		configFile, _ := cmd.Flags().GetString("config")
 
@@ -75,7 +75,7 @@ func init() {
 	startCmd.Flags().StringP("config", "c", "", "Path to YAML configuration file")
 	startCmd.MarkFlagRequired("config")
 
-	rootCmd.AddCommand(startCmd)
+	stubCmd.AddCommand(startCmd)
 }
 
 func taskFromActivityConfig(activitiesConfig []configuration.Activity) []stub.Task {

@@ -1,8 +1,9 @@
 # Temporal Phantom Worker
 
-Temporal Phantom Worker is a Go-based project designed to facilitate testing Temporal workflows in environments where
-not all microservices are available. It allows users to create worker stubs that register workflows and activities,
-returning predefined responses or errors based on the provided configuration.
+Temporal Phantom Worker is a Go-based project designed to facilitate testing Temporal workflows and activities in environments where
+parts of the system are unavailable. Functionality includes:
+1. Creation of Temporal Worker stubs that register workflows and activities returning predefined responses or errors based on provided configuration
+2. Testing Temporal Activities in isolation, without the need to trigger specific parent workflows
 
 ## Table of Contents
 
@@ -50,24 +51,24 @@ tar -xvf <tar-file>.tar.gz -C C:\desired\directory
 
 To run the project, use the following commands:
 
-### Validating configuration
+### Stub
+
+#### Validating configuration
 
 ```bash
-./temporal-phantom-worker validate -c ./config/sample.yaml
+./temporal-phantom-worker stub validate -c ./config/sample.yaml
 ```
 
-### Starting Phantom Worker
+#### Starting Phantom Worker Stub
 
 ```bash
-./temporal-phantom-worker start -c ./config/sample.yaml
+./temporal-phantom-worker stub start -c ./config/sample.yaml
 ```
 
-## Configuration
+#### Stub Configuration
 
 The configuration file should be in YAML format and define the workers, workflows, and activities. Each worker can have
 multiple workflows and activities, along with their expected results.
-
-### Configuration Options
 
 | Field                | Type              | Description                                                                                                                     |
 |----------------------|-------------------|---------------------------------------------------------------------------------------------------------------------------------|
@@ -96,61 +97,20 @@ multiple workflows and activities, along with their expected results.
 | │   │   ├─ `message` | String            | A message to be included in the error                                                                                           |
 | │   │   ├─ `details` | Any               | Any additional details to be included with the error (any valid yaml accepted)                                                  |
 
-### Example Config File
+Example configuration files can be found in the  ([config directory](config)):
 
-Here is an example configuration file ([sample.yaml](config/sample.yaml)):
 
-```yaml
-workers:
-  - name: SimpleWorker
-    task_queue: simple
-    workflows:
-      - type: HelloWorldWorkflow
-        result: "Hello World"
-    activities:
-      - type: HelloWorldActivity
-        result: "Hello World"
-  - name: ComplexWorker
-    task_queue: complex
-    workflows:
-      - type: HelloWorldWorkflow
-        result:
-          supportedLanguagesCount: 2
-          supportedLanguages:
-            - english
-            - maltese
-          messages:
-            english: "Hello World"
-            maltese: "Aw Dinja!"
-      - type: GoodbyeWorldWorkflow
-        result:
-          supportedLanguagesCount: 2
-          supportedLanguages:
-            - english
-            - maltese
-          messages:
-            english: "Goodbye World"
-            maltese: "Ċaw Dinja!"
-    activities:
-      - type: HelloWorldActivity
-        result:
-          supportedLanguagesCount: 2
-          supportedLanguages:
-            - english
-            - maltese
-          messages:
-            english: "Hello World"
-            maltese: "Aw Dinja!"
-      - type: GoodbyeWorldActivity
-        result:
-          supportedLanguagesCount: 2
-          supportedLanguages:
-            - english
-            - maltese
-          messages:
-            english: "Goodbye World"
-            maltese: "Ċaw Dinja!"
+### Activity
+
+#### Trigger
+
+Use the activity trigger command to execute an activity in isolation by wrapping it in a dynamic workflow:
+
+```bash
+./temporal-phantom-worker activity trigger -type MyTestActivity -taskqueue testQueue --input <activtyInput.yaml>
 ```
+
+The input file is an optional yaml file containing the input to pass to the activity. See the command's help for full list of options.
 
 ## Contributing
 
