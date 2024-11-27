@@ -22,7 +22,7 @@ var triggerActivityCmd = &cobra.Command{
 	Long:    `Trigger an activity by wrapping it in a workflow`,
 	Example: `
 	# Trigger an activity through a workflow
-	./phantom-worker trigger activity -type MyTestActivity -taskqueue testQueue
+	./phantom-worker activity trigger -type MyTestActivity -taskqueue testQueue
 		`,
 	Run: func(cmd *cobra.Command, args []string) {
 		activityType, _ := cmd.Flags().GetString("type")
