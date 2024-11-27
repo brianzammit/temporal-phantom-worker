@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/spf13/cobra"
 	"go.temporal.io/sdk/client"
+	"go.temporal.io/sdk/temporal"
 	"go.temporal.io/sdk/worker"
 	"go.temporal.io/sdk/workflow"
 	"gopkg.in/yaml.v3"
@@ -110,6 +111,9 @@ func startWorker(activityType string, taskQueue string, host string, port int, n
 		ctx = workflow.WithActivityOptions(ctx, workflow.ActivityOptions{
 			TaskQueue:              taskQueue,
 			ScheduleToCloseTimeout: time.Hour,
+			RetryPolicy: &temporal.RetryPolicy{
+				MaximumAttempts: 1,
+			},
 		})
 
 		// execute the desired activity
