@@ -1,11 +1,10 @@
 # Temporal Phantom Worker
 
 Temporal Phantom Worker is a Go-based project designed to facilitate testing Temporal workflows and activities in
-environments where
-parts of the system are unavailable. Functionality includes:
+environments where parts of the system are unavailable. Functionality includes:
 
 1. Creation of Temporal Worker stubs that register workflows and activities returning predefined responses or errors
-   based on provided configuration. Supports [result templating](#result-templating) to for dynamic results.
+based on provided configuration. Supports [result templating](#result-templating) to for dynamic results.
 2. Testing Temporal Activities in isolation, without the need to trigger specific parent workflows
 
 ## Table of Contents
@@ -112,7 +111,9 @@ Example configuration files can be found in the  ([config directory](config)).
 
 #### Result Templating
 
-Temporal Phantom Worker supports dynamic result generation for workflows and activities using Go's powerful text/template package. This allows you to create results that adapt based on input parameters or include randomized values, making your tests more flexible and robust.
+Temporal Phantom Worker supports dynamic result generation for workflows and activities using Go's powerful
+[text/template](https://pkg.go.dev/text/template) package. This allows you creating results that adapt based on input
+parameters or include randomized values, making tests more flexible and robust.
 
 Temporal Phantom Worker also supports the following additional functions to generate data:
 1. `randomString(length)`
