@@ -4,42 +4,39 @@ on:
   push:
     tags:
       - 'v*'  # Matches any tag that starts with "v" (e.g., v1.0.0)
-  pull_request:
-    branches:
-      - main
 
 permissions:
   contents: read
   packages: write
 
 jobs:
-#  release:
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v4
-#
-#      - name: Set up Go
-#        uses: actions/setup-go@v5
-#        with:
-#          go-version: '1.23'
-#
-#      - name: Run tests
-#        run: make test
-#
-#      - name: Build binaries for release
-#        run: make release
-#
-#      - name: Create GitHub Release
-#        uses: softprops/action-gh-release@v2
-#        with:
-#          files: |
-#            release/temporal-phantom-darwin-amd64-*.tar.gz
-#            release/temporal-phantom-linux-amd64-*.tar.gz
-#            release/temporal-phantom-windows-amd64-*.tar.gz
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Run tests
+        run: make test
+
+      - name: Build binaries for release
+        run: make release
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/temporal-phantom-darwin-amd64-*.tar.gz
+            release/temporal-phantom-linux-amd64-*.tar.gz
+            release/temporal-phantom-windows-amd64-*.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-docker-image:
     name: Build and Push Docker Image
