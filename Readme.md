@@ -1,3 +1,22 @@
+# Why This Project?
+[Temporal](https://temporal.io/) is an incredibly powerful tool for orchestrating workflows across microservices,
+enabling seamless coordination and fault tolerance in distributed systems. However, this strength can also introduce
+challenges when testing workflows in isolation.
+
+Testing workflows locally or in non-production environments often requires access to all dependent microservices or
+workflows, which may not always be available. This can lead to delays, brittle tests, or even skipped tests for critical
+components.
+
+The Temporal Phantom Worker addresses this problem by allowing you to stub worker process with predefined workflow and
+activity responses or errors. This makes it possible to:
+
+* Test individual workflows or activities in isolation without needing the entire system available.
+* Simulate various success and failure scenarios for workflows and activities.
+* Enhance confidence in the correctness of your workflows while maintaining flexibility in your testing approach.
+
+Whether you’re running tests locally, in CI pipelines, or in staging environments, the Temporal Phantom Worker
+simplifies and accelerates your workflow development and testing.
+
 # Temporal Phantom Worker
 
 Temporal Phantom Worker is a Go-based project designed to facilitate testing Temporal workflows and activities in
@@ -7,24 +26,25 @@ environments where parts of the system are unavailable. Functionality includes:
 based on provided configuration. Supports [result templating](#result-templating) to for dynamic results.
 2. Testing Temporal Activities in isolation, without the need to trigger specific parent workflows
 
-## Table of Contents
+# Table of Contents
 
 <!-- TOC -->
+* [Why This Project?](#why-this-project)
 * [Temporal Phantom Worker](#temporal-phantom-worker)
-  * [Table of Contents](#table-of-contents)
-  * [Installation](#installation)
-  * [Usage](#usage)
-    * [Stub](#stub)
-      * [Validating configuration](#validating-configuration)
-      * [Starting Phantom Worker Stub](#starting-phantom-worker-stub)
-      * [Stub Configuration](#stub-configuration)
-      * [Result Templating](#result-templating)
-    * [Activity](#activity)
-      * [Trigger](#trigger)
-  * [Contributing](#contributing)
+* [Table of Contents](#table-of-contents)
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Stub](#stub)
+    * [Validating configuration](#validating-configuration)
+    * [Starting Phantom Worker Stub](#starting-phantom-worker-stub)
+    * [Stub Configuration](#stub-configuration)
+    * [Result Templating](#result-templating)
+  * [Activity](#activity)
+    * [Trigger](#trigger)
+* [Contributing](#contributing)
 <!-- TOC -->
 
-## Installation
+# Installation
 
 1. **Download the Binary**
 
@@ -57,25 +77,25 @@ tar -xvf <tar-file>.tar.gz -C C:\desired\directory
 .\temporal-phantom-worker.exe --help
 ```
 
-## Usage
+# Usage
 
 To run the project, use the following commands:
 
-### Stub
+## Stub
 
-#### Validating configuration
+### Validating configuration
 
 ```bash
 ./temporal-phantom-worker stub validate -c ./config/basic-success-sample.yaml
 ```
 
-#### Starting Phantom Worker Stub
+### Starting Phantom Worker Stub
 
 ```bash
 ./temporal-phantom-worker stub start -c ./config/basic-success-sample.yaml
 ```
 
-#### Stub Configuration
+### Stub Configuration
 
 The configuration file should be in YAML format and define the workers, workflows, and activities. Each worker can have
 multiple workflow and activity definitions, along with their expected results.
@@ -109,7 +129,7 @@ multiple workflow and activity definitions, along with their expected results.
 
 Example configuration files can be found in the  ([config directory](config)).
 
-#### Result Templating
+### Result Templating
 
 Temporal Phantom Worker supports dynamic result generation for workflows and activities using Go's powerful
 [text/template](https://pkg.go.dev/text/template) package. This allows you creating results that adapt based on input
@@ -127,9 +147,9 @@ Example: `{{ randomInt 5 10 }}`
 
 For full templating  examples, refer to the [templating-samples.yaml](config/templating-sample.yaml) sample config file.
 
-### Activity
+## Activity
 
-#### Trigger
+### Trigger
 
 Use the activity trigger command to execute an activity in isolation by wrapping it in a dynamic workflow:
 
@@ -140,7 +160,7 @@ Use the activity trigger command to execute an activity in isolation by wrapping
 The input file is an optional yaml file containing the input to pass to the activity. See the command's help for full
 list of options.
 
-## Contributing
+# Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue if you have any suggestions or
 encounter any problems.
