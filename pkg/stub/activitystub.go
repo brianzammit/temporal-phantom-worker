@@ -18,14 +18,15 @@ func (a activityStub) Execute(ctx context.Context, input interface{}) (interface
 	fmt.Printf("Input: %s\n", input)
 
 	if a.task.isSuccess() {
-		processedResult, err := a.task.result.process(input)
+		var result interface{}
+		err := processResult(*a.task.result, input, &result)
 		if err != nil {
 			return nil, err
 		}
 
-		fmt.Printf("Output: %+v\n", processedResult)
+		fmt.Printf("Output: %+v\n", result)
 
-		return processedResult, nil
+		return result, nil
 	} else {
 		fmt.Printf("Error output: %v\n", a.task.error)
 
