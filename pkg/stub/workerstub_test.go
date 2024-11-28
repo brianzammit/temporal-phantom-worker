@@ -59,11 +59,13 @@ func TestWorkerStub_Run(t *testing.T) {
 	env := suite.NewTestWorkflowEnvironment()
 
 	// Prepare mock tasks for workflows and activities
+	task, _ := NewSuccessTask("TestWorkflow", "Workflow result")
 	workflows := []Task{
-		NewSuccessTask("TestWorkflow", "Workflow result"),
+		*task,
 	}
+	task, _ = NewSuccessTask("TestActivity", "Activity result")
 	activities := []Task{
-		NewSuccessTask("TestActivity", "Activity result"),
+		*task,
 	}
 
 	// Initialize the WorkerStub

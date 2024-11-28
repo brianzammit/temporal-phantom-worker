@@ -2,9 +2,9 @@ server:
   host: localhost
   port: 7233
   namespace: default
-  mtls: # Remove if mTLS is not required
-    cert_path: "cert.crt"
-    key_path: "cert.key"
+#  mtls: # Enable if mTLS is required
+#    cert_path: "cert.crt"
+#    key_path: "cert.key"
 workers:
     # a Simple Worker registering 1 Workflow and 1 Activity returning strings
   - name: SimpleWorker
@@ -56,21 +56,3 @@ workers:
           messages:
             english: "Goodbye World"
             maltese: "Ċaw Dinja!"
-  # An Error Worker simulating Workflow and Activity Errors
-  - name: ErrorWorker
-    task_queue: error
-    workflows:
-      - type: ErrorWorkflow
-        error:
-          type: "java.lang.RuntimeException"
-          message: "Oops! Something went wrong"
-          details: "These are simple string details"
-    activities:
-      - type: ErrorActivity
-        error:
-          type: "java.lang.RuntimeException"
-          message: "Oops! Something went wrong"
-          details:
-            cause:
-              name: "java.io.FileException"
-              message: "File not Found"

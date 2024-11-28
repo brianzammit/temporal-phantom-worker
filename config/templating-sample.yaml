@@ -1,0 +1,49 @@
+server:
+  host: localhost
+  port: 7233
+  namespace: default
+#  mtls: # Enable if mTLS is required
+#    cert_path: "cert.crt"
+#    key_path: "cert.key"
+workers:
+    # a Worker registering 2 Workflows and 2 Activities demonstrating templates
+  - name: TemplateWorker
+    task_queue: template
+    workflows:
+      - type: SuccessWorkflow
+        result:
+          timestamp: "{{ currentTime }}"
+          resultId: "{{ randomUUID }}"
+          randomData:
+            password: "{{ randomString 32 }}" # Generates a random 32 character string
+            number: "{{ randomInt 100 200 }}" # Generate a random integer between 100 and 200
+          # Greeting message will greet the `name` and `surname` present in the workflow input
+          greeting: "Hello {{ if .name }}{{ .name }}{{ end }} {{ if .surname }}{{ .surname }}{{ end }}"
+      - type: ErrorWorkflow
+        error:
+          type: "java.lang.RuntimeException"
+          message: "Oops! Something went wrong. Error ID: {{ randomUUID }}"
+          details:
+            timestamp: "{{ currentTime }}"
+            cause:
+              name: "java.io.FileException"
+              message: "File '{{ randomString 10 }}' not Found"
+    activities:
+      - type: SuccessActivity
+        result:
+          timestamp: "{{ currentTime }}"
+          resultId: "{{ randomUUID }}"
+          randomData:
+            password: "{{ randomString 32 }}" #Generates a random 32 character string
+            number: "{{ randomInt 100 200 }}" # Generate a random integer between 100 and 200
+          # Greeting message will greet the `name` and `surname` present in the workflow input
+          greeting: "Hello {{if .name }}{{ .name }}{{end}} {{if .surname}}{{.surname }}{{end}}"
+      - type: ErrorActivity
+        error:
+          type: "java.lang.RuntimeException"
+          message: "Oops! Something went wrong. Error ID: {{ randomUUID }}"
+          details:
+            timestamp: "{{ currentTime }}"
+            cause:
+              name: "java.io.FileException"
+              message: "File '{{ randomString 10 }}' not Found"

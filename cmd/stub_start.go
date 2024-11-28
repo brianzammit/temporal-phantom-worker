@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
+	"log"
 	"os"
 	"sync"
 	"temporal-phantom-worker/cmd/internal/configuration"
@@ -14,7 +16,7 @@ var startCmd = &cobra.Command{
 	Short: "Start the worker with a YAML configuration",
 	Example: `
 	# Start the Phantom Worker with a specific config
-	phantom-worker stub start -c ./config/sample.yaml`,
+	phantom-worker stub start -c ./config/basic-success-sample.yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
 		configFile, _ := cmd.Flags().GetString("config")
 
@@ -82,13 +84,17 @@ func taskFromActivityConfig(activitiesConfig []configuration.Activity) []stub.Ta
 	stubs := make([]stub.Task, len(activitiesConfig))
 	for i, a := range activitiesConfig {
 		if a.IsSuccess() {
-			stubs[i] = stub.NewSuccessTask(a.Type, a.Result)
+			task, err := stub.NewSuccessTask(a.Type, a.Result)
+			if err != nil {
+				log.Fatalln(fmt.Errorf("error creating success activity task: %v", err))
+			}
+			stubs[i] = *task
 		} else {
-			stubs[i] = stub.NewErrorTask(a.Type, stub.Error{
-				Type:    a.Error.Type,
-				Message: a.Error.Message,
-				Details: a.Error.Details,
-			})
+			task, err := stub.NewErrorTask(a.Type, a.Error.Type, a.Error.Message, a.Error.Details)
+			if err != nil {
+				log.Fatalln(fmt.Errorf("error creating error acitivty task: %v", err))
+			}
+			stubs[i] = *task
 		}
 	}
 	return stubs
@@ -98,13 +104,17 @@ func taskFromWorkflowConfig(workflowsConfig []configuration.Workflow) []stub.Tas
 	stubs := make([]stub.Task, len(workflowsConfig))
 	for i, w := range workflowsConfig {
 		if w.IsSuccess() {
-			stubs[i] = stub.NewSuccessTask(w.Type, w.Result)
+			task, err := stub.NewSuccessTask(w.Type, w.Result)
+			if err != nil {
+				log.Fatalln(fmt.Errorf("error creating success workflow task: %v", err))
+			}
+			stubs[i] = *task
 		} else {
-			stubs[i] = stub.NewErrorTask(w.Type, stub.Error{
-				Type:    w.Error.Type,
-				Message: w.Error.Message,
-				Details: w.Error.Details,
-			})
+			task, err := stub.NewErrorTask(w.Type, w.Error.Type, w.Error.Message, w.Error.Details)
+			if err != nil {
+				log.Fatalln(fmt.Errorf("error creating error workflow task: %v", err))
+			}
+			stubs[i] = *task
 		}
 	}
 	return stubs

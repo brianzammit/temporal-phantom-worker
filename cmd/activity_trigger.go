@@ -79,7 +79,8 @@ func triggerActivity(activityType string, taskQueue string, input interface{}, h
 
 	err = wf.Get(context.Background(), &result)
 	if err != nil {
-		log.Fatalln("Unable to get workflow result.", err)
+		log.Printf("\n---\nError:\n%s\n---\n", err)
+		return
 	}
 
 	yamlResult, err := yaml.Marshal(result)
@@ -87,7 +88,7 @@ func triggerActivity(activityType string, taskQueue string, input interface{}, h
 		log.Fatalln(fmt.Sprintf("Unable to marshal workflow result: %s", err))
 	}
 
-	log.Printf("Result:\n%s", yamlResult)
+	log.Printf("\n---\nResult:\n%s---\n", yamlResult)
 }
 
 func startWorker(activityType string, taskQueue string, host string, port int, namespace string, certPath string, keyPath string, workerQueue string, workflowName string) (client.Client, worker.Worker, error) {

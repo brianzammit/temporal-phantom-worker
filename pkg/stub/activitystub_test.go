@@ -13,8 +13,8 @@ func TestActivityStub_Execute_Success(t *testing.T) {
 	env := suite.NewTestActivityEnvironment()
 
 	// Set up a successful task
-	task := NewSuccessTask("exampleTask", "Success result")
-	activityStub := activityStub{task: task}
+	task, _ := NewSuccessTask("exampleTask", "Success result")
+	activityStub := activityStub{task: *task}
 
 	// Define the activity execution
 	env.RegisterActivity(activityStub.Execute)
@@ -33,10 +33,13 @@ func TestActivityStub_Execute_Error(t *testing.T) {
 	suite := testsuite.WorkflowTestSuite{}
 	env := suite.NewTestActivityEnvironment()
 
+	const errorType = "java.io.IOException"
+	const errorMessage = "oops - something went wrong"
+	const errorDetail = "My detail string"
+
 	// Set up a failing task
-	taskError := Error{Type: "java.io.IOException", Message: "oops - something went wrong"}
-	task := NewErrorTask("exampleTask", taskError)
-	activityStub := activityStub{task: task}
+	task, _ := NewErrorTask("exampleTask", errorType, errorMessage, errorDetail)
+	activityStub := activityStub{task: *task}
 
 	// Define the activity execution
 	env.RegisterActivity(activityStub.Execute)
@@ -49,9 +52,9 @@ func TestActivityStub_Execute_Error(t *testing.T) {
 		// Check if the error matches the expected error
 		if actError, ok := err.(*temporal.ActivityError); ok {
 			appError := actError.Unwrap().(*temporal.ApplicationError)
-			if appError.Message() != taskError.Message || appError.Type() != taskError.Type {
+			if appError.Message() != errorMessage || appError.Type() != errorType {
 				t.Errorf("Expected error message '%s' of type '%s', got '%s' of type '%s'",
-					taskError.Message, taskError.Type, appError.Message(), appError.Type())
+					errorMessage, errorType, appError.Message(), appError.Type())
 			}
 		} else {
 			t.Errorf("Expected an ApplicationError but got %v", err)

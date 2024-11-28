@@ -1,5 +1,5 @@
 # Name of the output binary
-BINARY_NAME=temporal-phantom-worker
+BINARY_NAME=temporal-phantom
 BIN_DIR=bin
 RELEASE_DIR=release
 
