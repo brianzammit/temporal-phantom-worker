@@ -38,7 +38,6 @@ based on provided configuration. Supports [result templating](#result-templating
     * [Validating configuration](#validating-configuration)
     * [Starting Phantom Worker Stub](#starting-phantom-worker-stub)
     * [Stub Configuration](#stub-configuration)
-    * [Result Templating](#result-templating)
   * [Activity](#activity)
     * [Trigger](#trigger)
 * [Contributing](#contributing)
@@ -129,11 +128,8 @@ multiple workflow and activity definitions, along with their expected results.
 
 Example configuration files can be found in the  ([config directory](config)).
 
-### Result Templating
+Example configuration files can be found in the  ([config directory](config)):
 
-Temporal Phantom Worker supports dynamic result generation for workflows and activities using Go's powerful
-[text/template](https://pkg.go.dev/text/template) package. This allows you creating results that adapt based on input
-parameters or include randomized values, making tests more flexible and robust.
 
 Temporal Phantom Worker also supports the following additional functions to generate data:
 1. `randomString(length)`
