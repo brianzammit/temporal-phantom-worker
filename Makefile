@@ -5,8 +5,8 @@ RELEASE_DIR=release
 
 # Version details
 VERSION ?= $(shell git describe --tags --abbrev=0)
+COMMIT_HASH ?= $(shell git rev-parse --short HEAD)
 BUILD_TIME := $(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
-COMMIT_HASH := $(shell git rev-parse --short HEAD)
 
 # Go settings
 GOENVVARS=CGO_ENABLED=0
@@ -89,6 +89,11 @@ release-darwin: build-darwin ## Create release package for Darwin
 	@ mkdir -p $(RELEASE_DIR)
 	@ tar -C $(BIN_DIR)/darwin -cvf $(RELEASE_DIR)/$(BINARY_NAME)-darwin-amd64-$(VERSION).tar.gz $(BINARY_NAME)
 
+.PHONY: docker-build
+docker-build: ## Build a docker image
+	@ echo "Building Docker image with VERSION=$(VERSION)"
+	@ docker build --build-arg VERSION=$(VERSION) --build-arg COMMIT_HASH=$(COMMIT_HASH) --build-arg BUILD_TIME=$(BUILD_TIME) -t temporal-phantom:$(VERSION) .
+
 # Run both build and tests
 .PHONY: all
-all: clean test build release
+all: clean test build release docker-build

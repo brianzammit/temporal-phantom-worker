@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*'  # Matches any tag that starts with "v" (e.g., v1.0.0)
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -33,3 +37,43 @@ jobs:
             release/temporal-phantom-windows-amd64-*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-docker-image:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Version from Tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ghcr.io/temporal-phantom:${{ env.VERSION }}
+            ghcr.io/temporal-phantom:latest
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            COMMIT_HASH=${{ github.sha }}
