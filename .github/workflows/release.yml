@@ -6,7 +6,7 @@ on:
       - 'v*'  # Matches any tag that starts with "v" (e.g., v1.0.0)
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -72,8 +72,8 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/temporal-phantom:${{ env.VERSION }}
-            ghcr.io/temporal-phantom:latest
+            ghcr.io/${{ github.repository }}:${{ env.VERSION }}
+            ghcr.io/${{ github.repository }}:latest
           build-args: |
             VERSION=${{ env.VERSION }}
             COMMIT_HASH=${{ github.sha }}
