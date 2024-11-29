@@ -33,6 +33,7 @@ based on provided configuration. Supports [result templating](#result-templating
 * [Temporal Phantom Worker](#temporal-phantom-worker)
 * [Table of Contents](#table-of-contents)
 * [Installation](#installation)
+* [Running in docker](#running-in-docker)
 * [Usage](#usage)
   * [Stub](#stub)
     * [Validating configuration](#validating-configuration)
@@ -74,6 +75,17 @@ tar -xvf <tar-file>.tar.gz -C C:\desired\directory
 
 # Windows
 .\temporal-phantom-worker.exe --help
+```
+
+# Running in docker
+
+Temporal Phantom Worker can also be easily run using Docker. This ensures a consistent environment and eliminates the
+need for manual setup.
+
+To get the latest version of the image:
+
+```bash
+docker pull ghcr.io/brianzammit/temporal-phantom-worker:latest
 ```
 
 # Usage

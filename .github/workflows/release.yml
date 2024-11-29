@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   release:
+    name: Test, Package, and Release
     runs-on: ubuntu-latest
 
     steps:
