@@ -140,9 +140,6 @@ multiple workflow and activity definitions, along with their expected results.
 
 Example configuration files can be found in the  ([config directory](config)).
 
-Example configuration files can be found in the  ([config directory](config)):
-
-
 Temporal Phantom Worker also supports the following additional functions to generate data:
 1. `randomString(length)`
 Example: `{{ randomString 10 }}`
