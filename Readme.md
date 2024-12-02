@@ -33,6 +33,7 @@ based on provided configuration. Supports [result templating](#result-templating
 * [Temporal Phantom Worker](#temporal-phantom-worker)
 * [Table of Contents](#table-of-contents)
 * [Installation](#installation)
+* [Running in docker](#running-in-docker)
 * [Usage](#usage)
   * [Stub](#stub)
     * [Validating configuration](#validating-configuration)
@@ -74,6 +75,17 @@ tar -xvf <tar-file>.tar.gz -C C:\desired\directory
 
 # Windows
 .\temporal-phantom-worker.exe --help
+```
+
+# Running in docker
+
+Temporal Phantom Worker can also be easily run using Docker. This ensures a consistent environment and eliminates the
+need for manual setup.
+
+To get the latest version of the image:
+
+```bash
+docker pull ghcr.io/brianzammit/temporal-phantom-worker:latest
 ```
 
 # Usage
@@ -127,9 +139,6 @@ multiple workflow and activity definitions, along with their expected results.
 | │   │   ├─ `details` | Any               | Any additional details to be included with the error (any valid yaml accepted). Supports [result templating](#result-templating) syntax in field values.                                                 |
 
 Example configuration files can be found in the  ([config directory](config)).
-
-Example configuration files can be found in the  ([config directory](config)):
-
 
 Temporal Phantom Worker also supports the following additional functions to generate data:
 1. `randomString(length)`
